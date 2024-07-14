@@ -41,24 +41,29 @@ class Goods():
         self.price = price
         self.address = address
 #Создал 6 экземпляров с указанными атрибутами(всё, что доступно на главной странице) и список
-product1 = Goods('Sauce Labs Backpack', '$29.99', '//*[@id="add-to-cart-sauce-labs-backpack"]')
-product2 = Goods('Sauce Labs Bike Light', '$9.99', '//*[@id="add-to-cart-sauce-labs-bike-light"]')
-product3 = Goods('Sauce Labs Bolt T-Shirt', '$15.99', '//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]')
-product4 = Goods('Sauce Labs Fleece Jacket', '$49.99', '//*[@id="add-to-cart-sauce-labs-fleece-jacket"]')
-product5 = Goods('Sauce Labs Onesie', '$7.99', '//*[@id="add-to-cart-sauce-labs-onesie"]')
-product6 = Goods('Test.allTheThings() T-Shirt (Red)', '$15.99', '//*[@id="add-to-cart-test.allthethings()-t-shirt-(red)"]')
+product1 = Goods('//*[@id="item_4_title_link"]', "//*[@id='inventory_container']/div/div[1]/div[2]/div[2]/div", '//*[@id="add-to-cart-sauce-labs-backpack"]')
+product2 = Goods('//*[@id="item_0_title_link"]', "//*[@id='inventory_container']/div/div[2]/div[2]/div[2]/div", '//*[@id="add-to-cart-sauce-labs-bike-light"]')
+product3 = Goods('//*[@id="item_1_title_link"]', "//*[@id='inventory_container']/div/div[3]/div[2]/div[2]/div", '//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]')
+product4 = Goods('//*[@id="item_5_title_link"]', "//*[@id='inventory_container']/div/div[4]/div[2]/div[2]/div", '//*[@id="add-to-cart-sauce-labs-fleece-jacket"]')
+product5 = Goods('//*[@id="item_2_title_link"]', "//*[@id='inventory_container']/div/div[5]/div[2]/div[2]/div", '//*[@id="add-to-cart-sauce-labs-onesie"]')
+product6 = Goods('//*[@id="item_3_title_link"]', "//*[@id='inventory_container']/div/div[6]/div[2]/div[2]/div", '//*[@id="add-to-cart-test.allthethings()-t-shirt-(red)"]')
 products = ['-', product1, product2, product3, product4, product5, product6]
+#Создаю 2 переменных самого предмета и цены
+item = driver.find_element(By.XPATH, products[int(product)].name).text
+price = driver.find_element(By.XPATH, products[int(product)].price).text
 # Пользуясь плодами знаний из ООП, печатаю товар и его цену
-print(products[int(product)].name,', price is ', products[int(product)].price)
+print(item,', price is ', price)
 # Снова магия ООП позволяет добавить выбранный вначале товар в корзину
 driver.find_element(By.XPATH, products[int(product)].address).click()
 time.sleep(1)
+item = driver.find_element(By.XPATH, products[int(product)].name).text
+price = driver.find_element(By.XPATH, products[int(product)].price).text
 # Открываю корзину
 driver.find_element(By.XPATH, '//*[@id="shopping_cart_container"]').click()
 print("Cart enter")
 time.sleep(1)
 #Так как на каждый товар используется уникальный локатор, использую оператор if и проверяю наличие названия продукта, объединяю с проверкой цены товара с ценой в корзине, здесь всё стандартно через экземпляр и местный локатор цены
-if products[int(product)].name in driver.find_element(By.XPATH, '//*[@id="cart_contents_container"]/div/div[1]/div[3]/div[2]').text and products[int(product)].price == driver.find_element(By.XPATH, '//*[@id="cart_contents_container"]/div/div[1]/div[3]/div[2]/div[2]/div').text.lstrip(("Item total: ")):
+if item in driver.find_element(By.XPATH, '//*[@id="cart_contents_container"]/div/div[1]/div[3]/div[2]').text and price == driver.find_element(By.XPATH, '//*[@id="cart_contents_container"]/div/div[1]/div[3]/div[2]/div[2]/div').text.lstrip(("Item total: ")):
     print("Your order is in the cart and price is correct!")
 # Используя метод click и локатор перехожу на следующую страницу
 driver.find_element(By.XPATH, '//*[@id="checkout"]').click()
@@ -79,14 +84,21 @@ time.sleep(1)
 # Используя метод click и локатор перехожу на следующую страницу
 driver.find_element(By.XPATH, '//*[@id="continue"]').click()
 #Так как здесь аналогично на каждый товар используется уникальный локатор, использую снова оператор if и проверяю наличие названия продукта, объединяю с проверкой цены товара с указанной ценой, здесь всё стандартно через экземпляр и местный локатор цены
-if products[int(product)].name in driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[1]/div[3]/div[2]').text:
-    assert products[int(product)].price == driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[2]/div[6]').text.lstrip("Item total: ")
-    print("Ещё раз, Вы выбирали номер", product, "и это", driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[1]/div[3]/div[2]').text, "\n", 'всё верно?(1 - да, верно, 2 - это не мой заказ)')
-    answer = input()
-    if answer == "1":
-        print('Item and price are correct, test is over')
-    elif answer == "2":
-        print("А зачем врать?")
+if item in driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[1]/div[3]/div[2]').text:
+    assert price == driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[2]/div[6]').text.lstrip("Item total: ")
+    print("Вы выбирали номер", product, "и это", driver.find_element(By.XPATH, '//*[@id="checkout_summary_container"]/div/div[1]/div[3]/div[2]').text)
+    while True:
+        print("Всё верно?(1 - да, это мой заказ, 2 - нет, здесь ошибка)")
+        answer = input()
+        if answer == "1":
+            print('Item and price are correct, test is over')
+            break
+        elif answer == "2":
+            print("А зачем врать? Подумайте ещё раз")
+            continue
+        else:
+            print("Только 1 или 2! Подумайте ещё раз")
+            continue
 # Делаю победный скрин
 driver.save_screenshot('screenshot.png')
 time.sleep(1)
