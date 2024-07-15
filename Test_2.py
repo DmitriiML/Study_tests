@@ -1,4 +1,5 @@
 # Импортировал из selenium'а webdriver и все необходимые библиотеки
+# I imported all necessary stuff from selenium and other libraries
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import time
@@ -6,10 +7,12 @@ from selenium.webdriver.chrome.options import Options
 from faker import Faker
 faker = Faker("en_US")
 # Приветствие, каталог с выбором(input)
+# Greetings and catalog of options
 print("Приветствую Вас в нашем интернет магазине")
 print("Выберите один из следующих товаров и укажите его номер: 1 - Sauce Labs Backpack, 2 - Sauce Labs Bike Light, 3 - Sauce Labs Bolt T-Shirt, 4 - Sauce Labs Fleece Jacket, 5 - Sauce Labs Onesie, 6 - Test.allTheThings() T-Shirt (Red)")
 product = input()
 # Настроил класс chrome options(Сохранил на всякий случай headless режим)
+
 options = Options()
 # options.add_argument('--headless=new')
 driver = webdriver.Chrome(options=options)
