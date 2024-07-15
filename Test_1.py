@@ -13,6 +13,12 @@ driver.get(base_url)
 driver.maximize_window()
 
 
+def to_x_path(text: str):
+ return f'//*[@id="{text}"]' 
+# This way you can save yourself a lot of trouble when you have to type '//*[@id="blablablablbla"]' all the time.
+# TODO: Try to replace the other similar occurences in your code, like filenames or x-paths.
+# More info on f-strings in Python:  https://www.geeksforgeeks.org/formatted-string-literals-f-strings-python/
+
 # Можно использовать неявное ожидание, но с ним дольше по времени(но для пробы вставлю под комментом)
 # driver.implicitly_wait(5)
 # Создаю класс и общий метод для всего процесса(можно и без метода, здесь для лемонстрации способа)
@@ -23,12 +29,13 @@ class Test1:
             # С помощью инкапсулирующего класса By нахожу локаторы и вставляю имена и пароль в поля и перехожу на
             # следующую страницу
             user_name = driver.find_element(By.ID, "user-name")
-            user_name.send_keys(driver.find_element(By.XPATH, '//*[@id="login_credentials"]').text.splitlines()[i])
+            user_name.send_keys(driver.find_element(By.XPATH, to_x_path('login_credentials')).text.splitlines()[i])
             print("Name input")
-            user_pass = driver.find_element(By.XPATH, "//*[@id='password']")
-            user_pass.send_keys(
-                driver.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div/div[2]').text.splitlines()[1])
-            print("Password input")
+                                # TODO: Try selecting line 31 to 33 from start to finish and then use CTRL+SHIFT+R, 
+                                # then select Extract Method and give it a new name like enter_username().
+                                # That way you can move all the smaller parts of your test into their own function.
+                                # Functions should typically contain no more than 5-10 lines of code. :)
+            self.enter_password()
             driver.find_element(By.CSS_SELECTOR, '#login-button').click()
             time.sleep(1)
             # Делаю скриншот с датой для каждого результата, используя библиотеку datetime
@@ -50,6 +57,12 @@ class Test1:
             driver.find_element(By.XPATH, '//*[@id="menu_button_container"]/div/div[1]/div').click()
             WebDriverWait(driver, 30).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="logout_sidebar_link"]'))).click()
+
+    def enter_password(self):
+        user_pass = driver.find_element(By.XPATH, "//*[@id='password']")
+        user_pass.send_keys(
+                driver.find_element(By.XPATH, '//*[@id="root"]/div/div[2]/div[2]/div/div[2]').text.splitlines()[1])
+        print("Password input")
 
 
 # Создаю экземпляр класса и запускаю метод test_selection()
