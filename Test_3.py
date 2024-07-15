@@ -27,7 +27,7 @@ time.sleep(1)
 print("Clear!")
 # Стёр полностью дату
 # Completely erased the date
-date_today = str(datetime.date.today()+ datetime.timedelta(days=10))
+date_today = str(datetime.date.today() + datetime.timedelta(days=10))
 print(date_today)
 new_date.send_keys(date_today)
 time.sleep(3)
