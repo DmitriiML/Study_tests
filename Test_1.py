@@ -1,4 +1,5 @@
 # Импортировал из selenium'а webdriver и все необходимые библиотеки
+# I imported all necessary stuff from selenium and other libraries
 import datetime
 import time
 from selenium import webdriver
@@ -7,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
 # С помощью объекта driver и метода get открыл тестируемый сервис, вторым методом увеличил окно
+# Using driver and method get site being tested, using second I maximazed the windoq
 driver = webdriver.Chrome()
 base_url = 'https://www.saucedemo.com/'
 driver.get(base_url)
@@ -20,14 +22,18 @@ def to_x_path(text: str):
 # More info on f-strings in Python:  https://www.geeksforgeeks.org/formatted-string-literals-f-strings-python/
 
 # Можно использовать неявное ожидание, но с ним дольше по времени(но для пробы вставлю под комментом)
+# Implicity wait can be here also used, but it functions slower(below this comment this variant)
 # driver.implicitly_wait(5)
-# Создаю класс и общий метод для всего процесса(можно и без метода, здесь для лемонстрации способа)
+# Создаю класс и общий метод для всего процесса(можно и без класса и метода, здесь для демонстрации способа)
+# I create class and common method for all process(it can works even without it, just to demonstrate the мфкшфте)
 class Test1:
     def test_selection(self):
         #  Использую цикл, выдающий цифры от 1 до 6, которые вставляю в локаторы и таким образом перебираю пользователей
+        # Using a loop produces numbers from 1 to 6, which I put in locators, I
         for i in range(1, 7):
             # С помощью инкапсулирующего класса By нахожу локаторы и вставляю имена и пароль в поля и перехожу на
             # следующую страницу
+            # 
             user_name = driver.find_element(By.ID, "user-name")
             user_name.send_keys(driver.find_element(By.XPATH, to_x_path('login_credentials')).text.splitlines()[i])
             print("Name input")
