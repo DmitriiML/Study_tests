@@ -39,7 +39,8 @@ time.sleep(3)
 # print(date_today)
 # new_date.send_keys(date_today)
 # time.sleep(1)
-#Альтернативный "математический способ"
+# Альтернативный "математический способ"
+# Alternative math method
 
 driver.save_screenshot('screenshot.png')
 time.sleep(3)
